@@ -9,6 +9,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.amarojc.dscatalog.dtos.CategoryDTO;
+
 @Entity
 @Table(name = "tb_category")
 public class Category implements Serializable {
@@ -75,5 +77,8 @@ public class Category implements Serializable {
 		this.name = name;
 	}
 	
-	
+	public Category(CategoryDTO categoryDTO) {
+		this.idCategory = categoryDTO.getIdCategory();
+		this.name = categoryDTO.getNameCategory();
+	}
 }

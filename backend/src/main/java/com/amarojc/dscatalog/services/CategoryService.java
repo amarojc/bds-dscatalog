@@ -36,4 +36,9 @@ public class CategoryService {
 				);
 		return new CategoryDTO(category);
 	}
+	
+	@Transactional
+	public CategoryDTO insertCategory(CategoryDTO categoryDTO) {
+		return new CategoryDTO(categoryRepository.save(new Category(categoryDTO)));
+	}
 }

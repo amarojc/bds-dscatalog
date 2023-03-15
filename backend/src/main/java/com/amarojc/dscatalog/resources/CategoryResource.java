@@ -1,13 +1,18 @@
 package com.amarojc.dscatalog.resources;
 
+import java.net.URI;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.amarojc.dscatalog.dtos.CategoryDTO;
 import com.amarojc.dscatalog.services.CategoryService;
@@ -29,5 +34,18 @@ public class CategoryResource {
 	public ResponseEntity<CategoryDTO> findById(@PathVariable Long id){
 		CategoryDTO categoryDTO = categoryService.findById(id);
 		return ResponseEntity.ok().body(categoryDTO);
+	}
+	
+	@PostMapping()
+	public ResponseEntity<CategoryDTO> create(@RequestBody CategoryDTO categoryDTO){
+		 categoryDTO = categoryService.insertCategory(categoryDTO);		 
+		 //Constroi a estrutura da URL para ser inserida no cabeçalho da resposta.
+		 URI uri = ServletUriComponentsBuilder
+				 	.fromCurrentRequest()
+				 	.path("/{id}")
+				 	.buildAndExpand(categoryDTO.getIdCategory()).toUri();
+		 
+		 //Created -> retorna o Status 201 com o endereço do novo recurso criado
+		 return ResponseEntity.created(uri).body(categoryDTO);
 	}
 }
