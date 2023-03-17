@@ -1,10 +1,10 @@
 package com.amarojc.dscatalog.services.exceptions;
 
-public class EntityNotFoundException extends RuntimeException {
+public class ObjectNotFoundException extends RuntimeException {
 
 	private static final long serialVersionUID = 1L;
 
-	public EntityNotFoundException(String msg) {
+	public ObjectNotFoundException(String msg) {
 		super(msg);
 	}
 
