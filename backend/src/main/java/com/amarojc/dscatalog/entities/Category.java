@@ -1,12 +1,16 @@
 package com.amarojc.dscatalog.entities;
 
 import java.io.Serializable;
+import java.time.Instant;
 import java.util.Objects;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
 import com.amarojc.dscatalog.dtos.CategoryDTO;
@@ -21,6 +25,13 @@ public class Category implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long idCategory;
 	private String name;
+	
+	//Gravando no padrão UTC
+	@Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
+	private Instant createdAt;
+	
+	@Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
+	private Instant updateAt;
 	
 	public Category() {
 	}
@@ -81,4 +92,24 @@ public class Category implements Serializable {
 		this.idCategory = categoryDTO.getIdCategory();
 		this.name = categoryDTO.getNameCategory();
 	}
+
+	public Instant getCreatedAt() {
+		return createdAt;
+	}
+
+	public Instant getUpdateAt() {
+		return updateAt;
+	}
+	
+	//Ao criar e/ou atualizar uma categoria será armazenado o instante atual
+	@PrePersist
+	public void preCreatedPersist() {
+		createdAt = Instant.now();
+	}
+	
+	@PreUpdate
+	public void preUpdatePersist() {
+		updateAt = Instant.now();
+	}
+	
 }
