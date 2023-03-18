@@ -1,14 +1,14 @@
 package com.amarojc.dscatalog.services;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import javax.persistence.EntityNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,11 +25,9 @@ public class CategoryService {
 	private CategoryRepository categoryRepository; 
 	
 	@Transactional(readOnly = true)
-	public List<CategoryDTO> findAllCategory(){
-		List<Category> list =  categoryRepository.findAll();
-		return list.stream()
-				.map(cat -> new CategoryDTO(cat))
-				.collect(Collectors.toList());
+	public Page<CategoryDTO> findAllPagedCategory(PageRequest pageRequest){
+		Page<Category> list =  categoryRepository.findAll(pageRequest);		
+		return list.map(cat -> new CategoryDTO(cat));
 	}
 	
 	@Transactional(readOnly = true)
