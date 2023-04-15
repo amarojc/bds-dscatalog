@@ -11,7 +11,7 @@ public class ProductFactory {
 	public static Product createProduct() {
 		Product product = new Product(1L, "Phone", "Good Phone", 800.0, "https://img.com/img.png",
 				Instant.parse("2023-10-20T03:00:00Z"));
-		product.getCategories().add(new Category(2L, "Electronics"));
+		product.getCategories().add(new Category(1L, "Electronics"));
 
 		return product;
 	}
