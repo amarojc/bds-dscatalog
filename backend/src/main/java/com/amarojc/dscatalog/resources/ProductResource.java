@@ -21,7 +21,7 @@ import com.amarojc.dscatalog.services.ProductService;
 
 @Controller
 @RequestMapping("/products")
-public class ProductResouce {
+public class ProductResource {
 	
 	@Autowired
 	private ProductService productService;
