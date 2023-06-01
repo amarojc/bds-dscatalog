@@ -1,5 +1,8 @@
 package com.amarojc.dscatalog.dtos;
 
+import com.amarojc.dscatalog.services.validation.UserInsertValid;
+
+@UserInsertValid
 public class UserInsertDTO extends UserDTO{
 
 	private static final long serialVersionUID = 1L;

@@ -29,7 +29,10 @@ public class User  implements Serializable{
 	private Long id;
 	private String firstName;
 	private String lastName;
+	
+	@Column(unique = true)
 	private String email;
+	
 	private String password;
 	
 	@ManyToMany(fetch = FetchType.EAGER)
