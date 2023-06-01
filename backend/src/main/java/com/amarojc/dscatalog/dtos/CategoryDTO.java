@@ -2,6 +2,8 @@ package com.amarojc.dscatalog.dtos;
 
 import java.io.Serializable;
 
+import javax.validation.constraints.NotBlank;
+
 import com.amarojc.dscatalog.entities.Category;
 
 public class CategoryDTO implements Serializable {
@@ -9,6 +11,8 @@ public class CategoryDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private Long idCategory;
+	
+	@NotBlank(message = "Campo obrigatório!")
 	private String nameCategory;
 
 	public CategoryDTO() {

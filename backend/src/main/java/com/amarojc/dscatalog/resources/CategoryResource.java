@@ -2,6 +2,8 @@ package com.amarojc.dscatalog.resources;
 
 import java.net.URI;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -41,7 +43,7 @@ public class CategoryResource {
 	}
 	
 	@PostMapping()
-	public ResponseEntity<CategoryDTO> create(@RequestBody CategoryDTO categoryDTO){
+	public ResponseEntity<CategoryDTO> create(@Valid @RequestBody CategoryDTO categoryDTO){
 		 categoryDTO = categoryService.insertCategory(categoryDTO);		 
 		 //Constroi a estrutura da URL para ser inserida no cabeçalho da resposta.
 		 URI uri = ServletUriComponentsBuilder
@@ -54,7 +56,7 @@ public class CategoryResource {
 	}
 	
 	@PutMapping(value = "/{id}")
-	public ResponseEntity<CategoryDTO> updateCategory(@PathVariable Long id, @RequestBody CategoryDTO categoryDTO){
+	public ResponseEntity<CategoryDTO> updateCategory(@PathVariable Long id, @Valid @RequestBody CategoryDTO categoryDTO){
 		categoryDTO = categoryService.updateCategory(id, categoryDTO);
 		return ResponseEntity.ok().body(categoryDTO);
 	}
