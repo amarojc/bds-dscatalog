@@ -9,6 +9,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +26,9 @@ import com.amarojc.dscatalog.services.exceptions.ObjectNotFoundException;
 @Service
 public class UserService {
 
+	@Autowired
+	private BCryptPasswordEncoder passwordEncoder;
+	
 	@Autowired
 	private UserRepository userRepository;
 	
@@ -51,7 +55,7 @@ public class UserService {
 	public UserDTO insertUser(UserInsertDTO userDTO) {
 		User user = new User();
 		copyUserDtoToEntityUser(userDTO, user);
-		user.setPassword(userDTO.getPassword());
+		user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
 		user = userRepository.save(user);
 	
 		return new UserDTO(user);
