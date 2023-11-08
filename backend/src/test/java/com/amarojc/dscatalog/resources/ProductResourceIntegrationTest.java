@@ -15,6 +15,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.amarojc.dscatalog.TokenUtil;
 import com.amarojc.dscatalog.dtos.ProductDTO;
 import com.amarojc.dscatalog.tests.ProductFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -30,9 +31,18 @@ public class ProductResourceIntegrationTest {
 	@Autowired
 	private ObjectMapper objectMapper;
 	
+	@Autowired
+	private TokenUtil tokenUtil;
+	
 	private Long existingId;
 	private Long nonExistingId;
 	private Long countTotalProducts;
+	
+	private String operatorUserName;
+	private String operatorPassword;
+	
+	private String adminUserName;
+	private String adminPassword;
 	
 	private ProductDTO productDTO;
 	
@@ -42,6 +52,12 @@ public class ProductResourceIntegrationTest {
 		nonExistingId = 1000l;
 		countTotalProducts = 25L;
 		productDTO = ProductFactory.createProductDTO();
+	
+		operatorUserName = "alex@gmail.com";
+		operatorPassword = "123456";
+		
+		adminUserName = "maria@gmail.com";
+		adminPassword = "123456";
 	}
 	
 	@Test
@@ -69,10 +85,12 @@ public class ProductResourceIntegrationTest {
 		String expectedName = productDTO.getName();
 		String expectedDescription = productDTO.getDescription();
 		
+		String accessToken = tokenUtil.obtainAccessToken(mockMvc, adminUserName, adminPassword);
 				
 		ResultActions result = mockMvc.perform(
 				put("/products/{id}", existingId)
 				.content(jsonBody)
+				.header("Authorization", "Bearer " + accessToken)
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON)
 				);	
@@ -87,9 +105,12 @@ public class ProductResourceIntegrationTest {
 	public void updateShouldReturnNotFoundWhenIdDoesNotExist() throws Exception{
 		String jsonBody = objectMapper.writeValueAsString(productDTO);
 		
+		String accessToken = tokenUtil.obtainAccessToken(mockMvc, adminUserName, adminPassword);
+		
 		ResultActions result = mockMvc.perform(
 				put("/products/{id}", nonExistingId)
 				.content(jsonBody)
+				.header("Authorization", "Bearer " + accessToken)
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON)
 				);
