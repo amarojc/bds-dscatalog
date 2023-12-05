@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.amarojc.dscatalog.dtos.ProductDTO;
@@ -27,10 +28,13 @@ public class ProductResource {
 	
 	@Autowired
 	private ProductService productService;
-	
+
 	@GetMapping
-	public ResponseEntity<Page<ProductDTO>> findAll(Pageable pageable){
-		Page<ProductDTO> products = productService.findAllPagedProduct(pageable);
+	public ResponseEntity<Page<ProductDTO>> find(
+							@RequestParam(value = "categoryId", defaultValue = "0") Long categoryId,
+							@RequestParam(value = "name", defaultValue = "") String name,
+							Pageable pageable){
+		Page<ProductDTO> products = productService.findAllPagedProduct(categoryId, name.trim(), pageable);
 		return ResponseEntity.ok().body(products);
 	}
 	

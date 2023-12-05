@@ -1,5 +1,7 @@
 package com.amarojc.dscatalog.services;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import javax.persistence.EntityNotFoundException;
@@ -35,6 +37,14 @@ public class ProductService {
 		Page<Product> list = productRepository.findAll(pageable);
 		return list.map(prod -> new ProductDTO(prod));
 		//return list.map(prod -> new ProductDTO(prod, prod.getCategories()));		
+	}
+	
+
+	@Transactional(readOnly = true)
+	public Page<ProductDTO> findAllPagedProduct(Long categoryId, String name, Pageable pageable){
+		List<Category> categories = (categoryId == 0) ? null : Arrays.asList(categoryRepository.getReferenceById(categoryId));		
+		Page<Product> list = productRepository.find(categories, name, pageable);
+		return list.map(prod -> new ProductDTO(prod));		
 	}
 	
 	@Transactional(readOnly = true)
