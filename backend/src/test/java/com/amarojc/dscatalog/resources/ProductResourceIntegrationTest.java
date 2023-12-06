@@ -15,9 +15,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.amarojc.dscatalog.TokenUtil;
 import com.amarojc.dscatalog.dtos.ProductDTO;
 import com.amarojc.dscatalog.tests.ProductFactory;
+import com.amarojc.dscatalog.tests.TokenUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @SpringBootTest
@@ -86,7 +86,7 @@ public class ProductResourceIntegrationTest {
 		String expectedDescription = productDTO.getDescription();
 		
 		String accessToken = tokenUtil.obtainAccessToken(mockMvc, adminUserName, adminPassword);
-				
+						
 		ResultActions result = mockMvc.perform(
 				put("/products/{id}", existingId)
 				.content(jsonBody)

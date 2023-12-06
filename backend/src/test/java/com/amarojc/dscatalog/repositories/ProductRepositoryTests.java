@@ -20,13 +20,13 @@ public class ProductRepositoryTests {
 	
 	private long existIngId; 
 	private long notExistingId;
-	private int countTotalProducts;
+	private long countTotalProducts;
 	
 	@BeforeEach
 	void setUp() throws Exception{
 		existIngId = 1L;
 		notExistingId = 300L;
-		countTotalProducts = 25;
+		countTotalProducts = 25L;
 	}
 	
 	/**

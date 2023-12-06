@@ -1,5 +1,7 @@
 package com.amarojc.dscatalog.services;
 
+import static org.mockito.ArgumentMatchers.any;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -9,7 +11,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -19,6 +20,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.amarojc.dscatalog.dtos.ProductDTO;
@@ -72,9 +74,9 @@ public class ProductServiceTests {
 		Mockito.doThrow(DataIntegrityViolationException.class).when(productRepository).deleteById(dependentId);
 
 		// Quando passar um objeto qualquer, do tipo pageable, deve retorna um page contendo uma lista de produtos.
-		Mockito.when(productRepository.findAll((Pageable) ArgumentMatchers.any())).thenReturn(page);
-
-		Mockito.when(productRepository.save(ArgumentMatchers.any())).thenReturn(product);
+		Mockito.when(productRepository.findAll((Pageable) any())).thenReturn(page);
+		
+		Mockito.when(productRepository.save(any())).thenReturn(product);
 		
 		Mockito.when(productRepository.findById(existingId)).thenReturn(Optional.of(product));
 		Mockito.when(productRepository.findById(nonExistingId)).thenReturn(Optional.empty());
@@ -84,6 +86,8 @@ public class ProductServiceTests {
 
 		Mockito.when(categoryRepository.getReferenceById(existingId)).thenReturn(category);
 		Mockito.when(categoryRepository.getReferenceById(nonExistingId)).thenThrow(EntityNotFoundException.class);
+
+		Mockito.when(productRepository.find(any(), any(), any())).thenReturn(page);
 	}
 
 	/**
@@ -140,11 +144,10 @@ public class ProductServiceTests {
 	 */
 	@Test
 	public void findAllPagedShouldReturnPage() {
-		Pageable pageable = PageRequest.of(0, 10);
-		Page<ProductDTO> result = productService.findAllPagedProduct(pageable);
+		Pageable pageable = PageRequest.of(0, 10, Sort.by("name"));
+		Page<ProductDTO> result = productService.findAllPagedProduct(0L, "", pageable);
 
 		Assertions.assertNotNull(result);
-		Mockito.verify(productRepository).findAll(pageable);
 	}
 
 	/**
